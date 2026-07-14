@@ -1,0 +1,6 @@
+{
+  "name": "Jalashka Instagram Launch",
+  "description": "A premium, editorial-style Instagram launch strategy presentation prepared specifically for Jalashka.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

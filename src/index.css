@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Jost", sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  
+  --color-warm-ivory: #F7F1E7;
+  --color-deep-burgundy: #5C1B29;
+  --color-muted-gold: #B89B5E;
+  --color-charcoal: #2B2B2B;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-warm-ivory);
+    color: var(--color-charcoal);
+  }
+}
+
+/* Custom scrollbar to match the premium editorial style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F1E7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B89B5E;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5C1B29;
+}
+
+/* Custom animations and styling utilities */
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.5rem;
+}
