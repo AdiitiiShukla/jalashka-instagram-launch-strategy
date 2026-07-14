@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { campaignItems } from '../data';
 import { CampaignItem } from '../types';
 import AestheticPlaceholder from './AestheticPlaceholder';
+// @ts-expect-error - Vite handles image asset resolution
+import brandLaunchPoster from '../assets/images/brand_launch_poster_1784062481690.jpg';
 
 export default function CampaignShowcase() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -174,55 +176,100 @@ export default function CampaignShowcase() {
           className="flex gap-6 overflow-x-auto scrollbar-none snap-x snap-mandatory py-4 cursor-grab active:cursor-grabbing pb-8"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {campaignItems.map((campaign) => (
-            <div
-              key={campaign.id}
-              className="flex-shrink-0 w-[290px] sm:w-[340px] md:w-[380px] snap-start group"
-            >
-              {/* Image Placeholder Frame */}
-              <div className="relative rounded-2xl overflow-hidden shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1 mb-5">
-                <AestheticPlaceholder
-                  pattern={campaign.bgPattern as any}
-                  themeColor={campaign.themeColor}
-                  accentText={campaign.accentText}
-                  title={campaign.title}
-                  subtitle={campaign.category}
-                  heightClass="h-[360px] md:h-[420px]"
-                />
-                
-                {/* Overlay hover effect */}
-                <div className="absolute inset-0 bg-[#2B2B2B]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                  <button 
+          {campaignItems.map((campaign) => {
+            const isBrandLaunch = campaign.id === 'brand-launch';
+            
+            return (
+              <div
+                key={campaign.id}
+                className="flex-shrink-0 w-[290px] sm:w-[340px] md:w-[380px] snap-start group"
+              >
+                {/* Image Placeholder or Campaign Poster Frame */}
+                <div className="relative rounded-2xl overflow-hidden shadow-sm transition-all duration-[350ms] ease-out group-hover:shadow-md group-hover:-translate-y-1 mb-5 h-[360px] md:h-[420px]">
+                  {isBrandLaunch ? (
+                    <>
+                      {/* Brand Launch Campaign Poster */}
+                      <img
+                        src={brandLaunchPoster}
+                        alt="Jalashka Brand Launch Poster"
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover transition-transform duration-[350ms] ease-out group-hover:scale-[1.03]"
+                      />
+                      
+                      {/* Subtle dark gradient overlay from bottom to top (20–35% opacity) */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
+                      
+                      {/* Overlay Content (bottom-left) */}
+                      <div className="absolute bottom-6 left-6 z-10 flex flex-col items-start text-[#F7F1E7]">
+                        <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-[#B89B5E] font-semibold mb-1">
+                          Campaign Design
+                        </span>
+                        <h4 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-white leading-none">
+                          BRAND LAUNCH
+                        </h4>
+                        <span className="font-serif text-sm md:text-base font-light italic text-[#F7F1E7]/80 mt-1">
+                          DROP 01
+                        </span>
+                      </div>
+                      
+                      {/* View Project Button (bottom-right / overlay hover) */}
+                      <div className="absolute bottom-6 right-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-[350ms] ease-out">
+                        <button
+                          onClick={() => openLightbox(campaign)}
+                          className="px-5 py-2.5 bg-[#2A1E17] text-[#F7F1E7] border border-[#2A1E17] rounded-full font-sans text-[10px] uppercase tracking-widest font-bold shadow-md transition-all duration-[350ms] ease-out hover:bg-[#F7F1E7] hover:text-[#2A1E17] hover:scale-[1.05] flex items-center gap-1.5 cursor-pointer"
+                        >
+                          View Project
+                          <ArrowRight size={10} />
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <AestheticPlaceholder
+                        pattern={campaign.bgPattern as any}
+                        themeColor={campaign.themeColor}
+                        accentText={campaign.accentText}
+                        title={campaign.title}
+                        subtitle={campaign.category}
+                        heightClass="h-[360px] md:h-[420px]"
+                      />
+                      
+                      {/* Overlay hover effect */}
+                      <div className="absolute inset-0 bg-[#2B2B2B]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                        <button 
+                          onClick={() => openLightbox(campaign)}
+                          className="px-6 py-3 bg-[#F7F1E7] text-[#5C1B29] rounded-full font-sans text-xs uppercase tracking-widest font-medium shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 flex items-center gap-2 cursor-pointer"
+                        >
+                          <Eye size={14} />
+                          View Project
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Text Meta Info */}
+                <div className="px-1">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#B89B5E]">
+                    {campaign.category}
+                  </span>
+                  <h3 className="font-serif text-lg md:text-xl font-medium text-[#2B2B2B] mt-1 group-hover:text-[#5C1B29] transition-colors">
+                    {campaign.title}
+                  </h3>
+                  <p className="font-sans text-xs text-[#2B2B2B]/70 mt-1 leading-relaxed line-clamp-2 font-light">
+                    {campaign.description}
+                  </p>
+                  <button
                     onClick={() => openLightbox(campaign)}
-                    className="px-6 py-3 bg-[#F7F1E7] text-[#5C1B29] rounded-full font-sans text-xs uppercase tracking-widest font-medium shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 flex items-center gap-2 cursor-pointer"
+                    className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#5C1B29] font-semibold mt-3 flex items-center gap-1.5 hover:text-[#2B2B2B] transition-colors cursor-pointer group/btn"
                   >
-                    <Eye size={14} />
-                    View Project
+                    View Presentation
+                    <ArrowRight size={10} className="transform group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
-
-              {/* Text Meta Info */}
-              <div className="px-1">
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#B89B5E]">
-                  {campaign.category}
-                </span>
-                <h3 className="font-serif text-lg md:text-xl font-medium text-[#2B2B2B] mt-1 group-hover:text-[#5C1B29] transition-colors">
-                  {campaign.title}
-                </h3>
-                <p className="font-sans text-xs text-[#2B2B2B]/70 mt-1 leading-relaxed line-clamp-2 font-light">
-                  {campaign.description}
-                </p>
-                <button
-                  onClick={() => openLightbox(campaign)}
-                  className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#5C1B29] font-semibold mt-3 flex items-center gap-1.5 hover:text-[#2B2B2B] transition-colors cursor-pointer group/btn"
-                >
-                  View Presentation
-                  <ArrowRight size={10} className="transform group-hover/btn:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
